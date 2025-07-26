@@ -1,46 +1,58 @@
 README.md
 ==========
 
-A tiny, self-contained Python “agent” that turns any blog-post URL into a clean, single Markdown file.
+> 🚀 **One-liner pitch:** paste any blog-post URL → get a clean Markdown file in `workspace/scrapped websites/`.
 
-Installation
-------------
+---
+
+## 🔧 Installation (local)
 
 ```bash
 git clone <this-repo>
 cd <this-repo>
 
-# Create a virtual env (optional but recommended)
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate   # Windows: venv\Scripts\activate
 
-pip install -r requirements.txt   # or manually:
-# pip install requests beautifulsoup4 markdownify python-dateutil
+pip install -r requirements.txt
 ```
 
-Usage
------
+### 📦 requirements.txt
+```text
+requests>=2.31.0
+beautifulsoup4>=4.12.2
+markdownify>=0.12.1
+python-dateutil>=2.8.2
+```
 
+---
+
+## ▶️ Usage
+
+### Option A – Local CLI
 ```bash
 python scrape_blog.py https://example.com/interesting-article
 ```
 
-The script downloads the page, extracts:
+### Option B – **Zero-install Colab notebook**  
+Open the ready-to-run Google Colab 🪄  
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dsqibQa21-IV2KL1X9Opmwi1qL7aRkoC?usp=sharing)
 
-* Title  
-* Publication date (if found)  
-* Body text (ignoring nav, footer, ads, etc.)  
+> Paste any URL in the first cell, execute, and download the `.md` straight from the notebook!
 
-…and writes a file to
+---
 
-```
-workspace/scrapped websites/<sanitized-title>.md
-```
-
-Example output
---------------
+## 📁 Output structure
 
 ```
+workspace/
+└── scrapped websites/
+    └── how-to-train-your-dragon.md   # sanitized title
+```
+
+Each file looks like:
+
+```markdown
 # How to Train Your Dragon
 *Published on 2024-07-26*
 
@@ -51,36 +63,26 @@ Once upon a time …
 Taken from: https://example.com/interesting-article
 ```
 
-Folder structure
-----------------
+---
 
-```
-.
-├── scrape_blog.py          # main script
-├── requirements.txt        # pip dependencies
-└── workspace/scrapped websites/   # output directory (auto-created)
-```
+## 🛠️ Customisation
 
-Customisation
--------------
+| What to tweak | Where to look |
+|---------------|---------------|
+| CSS selectors for main content | `detect_main_content()` |
+| Extra date sources | `extract_common()` |
+| Auth / JS rendering | replace `requests` with `playwright` or `selenium` |
 
-1. **Tweak content extraction**  
-   Edit the CSS selector list inside `detect_main_content()` in `scrape_blog.py`.
+---
 
-2. **Add new date sources**  
-   Extend `extract_common()` if your target site uses custom markup.
+## ❓ Troubleshooting
 
-3. **Authentication / JS rendering**  
-   Replace the `requests` call with `playwright` or `selenium` if pages are behind login walls or rendered client-side.
+* **SSL errors** → upgrade certificates or add `verify=False`
+* **Wrong date format** → extend `dateutil.parser` rules
+* **File-name collisions** → append a timestamp in `slugify()`
 
-Troubleshooting
----------------
+---
 
-* **SSL / certificate errors**: upgrade certificates or pass `verify=False` to `requests.get`.  
-* **Wrong date format**: ensure the site’s date string is parseable by `dateutil.parser`.  
-* **File name collisions**: the script sanitizes titles, but you can add a timestamp suffix if desired.
+## 📄 License
 
-License
--------
-
-MIT – do whatever you like.
+MIT – feel free to fork, tweak, and share!
